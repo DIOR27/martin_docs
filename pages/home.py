@@ -1,107 +1,124 @@
 from martin import (
-    Raw, Column, Row, Spacer, Divider,
-    Heading, Text, Paragraph, Button, Icon, Badge,
-    Border, Shadow, TextStyle, Glass, GradientText, MeshBackground, Colors,
+    PageConfig,
+    Column,
+    Row,
+    Button,
+    Divider,
+    Heading,
+    Paragraph,
+    Hero,
+    Timeline,
+    TimelineItem,
+    MeshBackground,
+    TextStyle,
+    Colors,
 )
+from pages.shared import page_header, section, mini_card, code_block, global_footer
 
 
 def home():
-    from martin import PageConfig
     page = Column(
         style=MeshBackground.themed(),
         children=[
-
+            Hero(
+                badge="Official documentation",
+                title=Heading(
+                    "Martin",
+                    level=1,
+                    style=TextStyle(size=64, weight="800", letter_spacing=-2),
+                ),
+                subtitle=Paragraph(
+                    "A Python web framework with widget-based composition. "
+                    "This documentation site is also built with Martin.",
+                    style=TextStyle(size=18, color="var(--text-muted)", line_height=1.7),
+                ),
+                actions=[
+                    Button("Get started", href="/getting-started", background=Colors.indigo, color="white", radius=12, padding=14),
+                    Button("UI Widgets", href="/widgets-ui", variant="ghost", radius=12, padding=14),
+                ],
+                layout="center",
+                align="center",
+                min_height=440,
+                background=MeshBackground.themed(),
+            ),
             Column(
-                padding=80, gap=24,
-                style="align-items:center; text-align:center; min-height:80vh; justify-content:center",
+                padding=48,
+                gap=28,
                 children=[
-
+                    page_header(
+                        "A clean interface for learning the framework",
+                        "The documentation is split by level so it stays readable: guide, UI widgets, advanced widgets, and reusable examples.",
+                    ),
                     Row(
-                        gap=8,
-                        style=[
-                            Glass.dark(blur=12, opacity=0.06),
-                            Border(radius=999),
-                            "padding:6px 16px; display:inline-flex; align-items:center",
-                        ],
+                        gap=16,
+                        style="flex-wrap:wrap",
                         children=[
-                            Raw('<span style="width:7px;height:7px;border-radius:50%%;'
-                                'background:#34d399;animation:pulse 2s infinite"></span>'),
-                            Text("v0.1.0 - ahora disponible",
-                                 style=TextStyle(size=13, color="var(--accent)")),
-                        ]
+                            mini_card("Short guide", "Start quickly without unnecessary noise."),
+                            mini_card("UI Widgets", "Text, layout, buttons, inputs, and basic media."),
+                            mini_card("Pro Widgets", "Hero, gallery, carousel, map, word cloud, and more."),
+                            mini_card("Examples", "Reusable patterns you can copy and adapt."),
+                        ],
                     ),
-
-                    Heading(
-                        "MARTIN", level=1,
-                        style=[
-                            GradientText.aurora(),
-                            TextStyle(size=72, weight="800", letter_spacing=-3),
-                        ]
+                    Divider(color="var(--border)"),
+                    section(
+                        "Recommended path",
+                        "Start with the essentials, then move into more powerful widgets.",
+                        [
+                            Timeline(
+                                items=[
+                                    TimelineItem(
+                                        title="1. App + Router",
+                                        date="Base",
+                                        description="Learn how pages are registered and how the app runs.",
+                                        icon="🧭",
+                                        color=Colors.indigo,
+                                        tag="Start",
+                                    ),
+                                    TimelineItem(
+                                        title="2. UI Widgets",
+                                        date="Core",
+                                        description="Text, layout, buttons, forms, and images.",
+                                        icon="🧩",
+                                        color=Colors.blue,
+                                        tag="UI",
+                                    ),
+                                    TimelineItem(
+                                        title="3. Pro Widgets",
+                                        date="Advanced",
+                                        description="Components with richer behavior and more variants.",
+                                        icon="🚀",
+                                        color=Colors.green,
+                                        tag="Pro",
+                                    ),
+                                ]
+                            )
+                        ],
                     ),
+                    section(
+                        "Minimal entry point",
+                        "A Martin site can start with very little code.",
+                        [
+                            code_block(
+                                """from martin import App, Router
+from pages.home import home
 
-                    Paragraph(
-                        "Build beautiful, modern and responsive websites using Python.",
-                        style=TextStyle(size=20, color="var(--text-muted)", line_height=1.6),
+router = Router()
+router.add("/", home, title="Home")
+
+app = App(router=router, title="Martin Docs")
+
+if __name__ == "__main__":
+    app.run()"""
+                            )
+                        ],
                     ),
-
-                    Row(gap=12, children=[
-                        Button(
-                            "Empezar ->",
-                            background="linear-gradient(135deg, #6366f1, #818cf8)",
-                            color="white", radius=10, padding=16,
-                            style="border:none; font-size:15px; font-weight:700; "
-                                  "box-shadow:0 0 32px rgba(99,102,241,0.4)",
-                        ),
-                        Button(
-                            "Ver componentes", href="/components",
-                            style=[
-                                Glass.dark(opacity=0.06),
-                                Border(radius=10),
-                                "color:var(--text-muted); font-size:15px; padding:14px 24px",
-                            ]
-                        ),
-                    ]),
-                ]
+                ],
             ),
-
-            Row(
-                gap=16, padding=48,
-                style="flex-wrap:wrap; justify-content:center",
-                children=[_feature(i, t, d) for i, t, d in [
-                    ("🧩", "Widget tree",     "Compón interfaces anidando componentes Python."),
-                    ("🎨", "Estilos propios", "Glass(), GradientText(), Shadow()... sin CSS."),
-                    ("⚡", "Hot reload",      "Guarda el fichero y el navegador se actualiza."),
-                    ("📄", "Multi-pagina",    "Router con paginas en ficheros separados."),
-                    ("📦", "Zero deps",       "Solo stdlib de Python. watchdog opcional."),
-                    ("🚀", "Export",          "martin export -> HTML listo para deploy."),
-                ]],
-            ),
-
-            Raw('<style>@keyframes pulse{'
-                '0%%,100%%{opacity:1;transform:scale(1)}'
-                '50%%{opacity:.5;transform:scale(.8)}}</style>'),
-        ]
-    )
-    return page, PageConfig(
-        title="MARTIN",
-        description="Build beautiful, modern and responsive websites using Python.",
-    )
-
-
-def _feature(icon, title, desc):
-    from martin import Column, Heading, Text, Icon, Border, Shadow, Glass, TextStyle
-    return Column(
-        gap=12, padding=24,
-        style=[
-            "background:var(--surface); border:1px solid var(--border)",
-            Border(radius=16),
-            Shadow(y=8, blur=24, color="rgba(0,0,0,0.1)"),
-            "width:280px; transition:transform 0.2s",
         ],
-        children=[
-            Icon(icon, size=32),
-            Heading(title, level=3,
-                    style=TextStyle(size=15, weight="700", color="var(--text)")),
-            Text(desc, style=TextStyle(size=13, color="var(--text-muted)", line_height=1.6)),
-        ]
+    )
+
+    return page, PageConfig(
+        title="Martin Docs",
+        description="Clean documentation for the Martin framework.",
+        footer=global_footer(),
     )
